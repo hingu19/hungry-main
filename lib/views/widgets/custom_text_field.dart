@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.obsecureText = false,
     this.padding,
-    this.margin,
+    this.margin, String? errorText, required void Function(dynamic email) onChanged,
   });
 
   @override

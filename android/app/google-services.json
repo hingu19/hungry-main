@@ -12,7 +12,12 @@
           "package_name": "com.example.hungry"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "393756993498-ejlo193svarpmuopekcibgb2atgb5qnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCjXZYdYtNgw45mzIwos3i9nCcK5YO-9pk"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393756993498-ejlo193svarpmuopekcibgb2atgb5qnu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

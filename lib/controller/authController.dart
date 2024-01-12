@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:receipes/components/colors.dart';
-// import 'package:receipes/components/common_methos.dart';
-// import 'package:receipes/pages/login_screen.dart';
+import 'package:hungry/views/screens/home_page.dart';
+import 'package:hungry/views/widgets/modals/login_modal.dart';
+//import 'package:receipes/components/colors.dart';
+//import 'package:receipes/components/common_methos.dart';
+//import 'package:receipes/pages/login_modal.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-// import '../pages/home_page.dart';
+//import '../pages/home_screen.dart';
 import '../util/colors.dart';
 import '../util/common_methods.dart';
-import '../views/screens/home_page.dart';
-import '../views/widgets/modals/login_modal.dart';
 
 class AuthController extends GetxController {
   TextEditingController emailController = TextEditingController();

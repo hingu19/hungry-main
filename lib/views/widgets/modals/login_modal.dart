@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:hungry/controller/authController.dart';
 import 'package:hungry/views/screens/page_switcher.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/custom_text_field.dart';
+import 'package:hungry/views/widgets/modals/register_modal.dart';
+
+import '../../../util/colors.dart';
+import '../../../util/common_methods.dart';
+import '../../utils/shadow_container_widget.dart';
 
 class LoginModal extends StatefulWidget {
-
-
   @override
-  State<LoginModal> createState() => _LoginModalState();
+  State<LoginModal> createState() => LoginModalState();
 }
 
-class _LoginModalState extends State<LoginModal> {
+class LoginModalState extends State<LoginModal> {
   var controller = Get.put(AuthController());
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+
+  bool isEmailValid = true;
+  bool isPasswordValid = true;
+
+  get child => null;
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -28,7 +39,7 @@ class _LoginModalState extends State<LoginModal> {
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             physics: BouncingScrollPhysics(),
-            children: [
+            children: <Widget>[
               Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -47,8 +58,29 @@ class _LoginModalState extends State<LoginModal> {
                 ),
               ),
               // Form
-              CustomTextField(title: 'Email', hint: 'youremail@email.com'),
-              CustomTextField(title: 'Password', hint: '**********', obsecureText: true, margin: EdgeInsets.only(top: 16)),
+              CustomTextField(
+                title: 'Email',
+                hint: 'youremail@email.com',
+                onChanged: (value) {
+                  setState(() {
+                    isEmailValid = validateEmail(value);
+                  });
+                },
+                errorText: isEmailValid ? null : 'Enter a valid email',
+              ),
+              CustomTextField(
+                title: 'Password',
+                hint: '**********',
+                obsecureText: true,
+                margin: EdgeInsets.only(top: 16),
+                onChanged: (value) {
+                  setState(() {
+                    isPasswordValid = validatePassword(value);
+                  });
+                },
+                errorText: isPasswordValid ? null : 'Password must be at least 6 characters',
+              ),
+
               // Log in Button
               Container(
                 margin: EdgeInsets.only(top: 32, bottom: 6),
@@ -56,9 +88,19 @@ class _LoginModalState extends State<LoginModal> {
                 height: 60,
                 child: ElevatedButton(
                   onPressed: () {
-                    // controller.
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PageSwitcher()));
+                    if (controller.emailController.text.isEmpty) {
+                      CommonMethod()
+                          .getXSnackBar('Error', 'Please enter email', red);
+                    } else if (!emailRegex
+                        .hasMatch(controller.emailController.text)) {
+                      CommonMethod().getXSnackBar(
+                          'Error', 'Please enter valid email', red);
+                    } else if (controller.passwordController.text.isEmpty) {
+                      CommonMethod().getXSnackBar(
+                          'Error', 'Please enter password', red);
+                    } else {
+                      controller.signInWithEmailAndPassword(context);
+                    }
                   },
                   child: Text('Login', style: TextStyle(color: AppColor.secondary, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'inter')),
                   style: ElevatedButton.styleFrom(
@@ -67,8 +109,25 @@ class _LoginModalState extends State<LoginModal> {
                   ),
                 ),
               ),
+
+              ShadowContainerWidget(
+                  padding: 0,
+
+                  widget: SizedBox(
+                    height: 50,
+                    child: Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Sign In with Google')
+                        // Add more widgets if needed
+                      ],
+                    ),
+                  )),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Handle forgot password logic
+                },
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                 ),
@@ -78,12 +137,13 @@ class _LoginModalState extends State<LoginModal> {
                     style: TextStyle(color: Colors.grey),
                     children: [
                       TextSpan(
-                          style: TextStyle(
-                            color: AppColor.primary,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'inter',
-                          ),
-                          text: 'Reset')
+                        style: TextStyle(
+                          color: AppColor.primary,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'inter',
+                        ),
+                        text: 'Reset',
+                      )
                     ],
                   ),
                 ),
@@ -93,5 +153,16 @@ class _LoginModalState extends State<LoginModal> {
         )
       ],
     );
+  }
+
+  bool validateEmail(String email) {
+    // Use a regular expression for basic email validation
+    RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool validatePassword(String password) {
+    // Password must be at least 6 characters
+    return password.length >= 6;
   }
 }
