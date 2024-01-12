@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hungry/controller/authController.dart';
 import 'package:hungry/views/screens/page_switcher.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/custom_text_field.dart';
 
-class LoginModal extends StatelessWidget {
+class LoginModal extends StatefulWidget {
+
+
+  @override
+  State<LoginModal> createState() => _LoginModalState();
+}
+
+class _LoginModalState extends State<LoginModal> {
+  var controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -45,6 +56,7 @@ class LoginModal extends StatelessWidget {
                 height: 60,
                 child: ElevatedButton(
                   onPressed: () {
+                    // controller.
                     Navigator.of(context).pop();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PageSwitcher()));
                   },
